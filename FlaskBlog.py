@@ -13,5 +13,5 @@ def hello():
 #--> http://127.0.0.1:5000/ --> this is a running webserver
 #Problems: pip install virtualenv, couldn't find a Flask app
 #solution to the problem: set FLASK_APP=FlaskBlog.py # dont use a space when setting the environment variable
-#solution to the problem: set FLASK_APP=FlaskBlog.py # dont use a space when setting the environment variable
+
 
