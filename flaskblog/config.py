@@ -2,7 +2,7 @@ import os
 
 
 class Config:
-    SECRET_KEY = os.urandom(32)
+    SECRET_KEY = 'b19500995ddc5f93b7556ad3514e4756'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 465
