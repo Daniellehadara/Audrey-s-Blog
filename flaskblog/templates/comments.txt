@@ -1,0 +1,586 @@
+<!-- for loop, openning code block //-->
+<!--for each post at the time, inside the loop there will be info to each post //-->
+<!-- variable that we are printing out will be in {{}}//-->
+ {%for post in posts %}
+        <h1>{{post.title}}</h1>
+        <p> By {{ post.author }} on {{post.date_posted}}</p>
+        <p> {{post.content}}</p>
+    {% endfor %}
+
+#to pass a title to the webpages, but if not--> so just to have a default
+#--> adding an if statement
+#we need again code block to do an if statement
+    {%if title%}
+        <title>Flask Blog - {{ title }}</title>
+    {% else %}
+        <title>Flask Blog</title>
+    {% endif %}
+
+#to pass a title we will define it in the code
+#in tutorial part 2 --> he mentions that the home and about are very similar, therefore we will create a new file and
+#copy the code to another template, html that is shared between the two--> template inheritance
+#--> create a block in body
+#adding from bootstrap, starter template (copy html and java script)--> create a div with container class of bootstrap
+#for padding and layout and for using bootstrap
+
+#use href to see where is it located
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            <!-- when we are accessing variables we need to rap it {{}}, it adds a token, cross site token, part of the protection  -->
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <!-- legend for our registration form, bootstrap stuff, mb-4=margin botton 4   -->
+                <legend class="border-bottom mb-4">Join Today</legend>
+                <div class="form-group">
+                    {{ form.username.label(class = "form-control-label") }}
+                    {{ form.username.label(class = "form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class = "form-control-label") }}
+                    {{ form.email.label(class = "form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class = "form-control-label") }}
+                    {{ form.password.label(class = "form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class = "form-control-label") }}
+                    {{ form.confirm_password.label(class = "form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{form.submit(class="btn btn-outline-info")}}
+            </div>
+        </form>
+    </div>
+ <!-- another div for if they already have an account  -->
+    <div class="border-top pt-3">
+        <!-- add small text, it will look a bit faded thanks to this class -->
+        <small class="text-muted">
+             <!-- <a it is an hancare tag  -->
+            Already have an account? <a class="ml-2" href="{{url_for('login')}}"> Sign In</a>
+        </small>
+
+    </div>
+{% endblock content  %}
+
+
+in Video part 4: preparing a database with SQL which is an ORM in Python - Object Relational Mapper
+it will allow us to access our database in an easy use of object oriented way, you can use different databases without changing your python code.
+we will use first SQL light for development and then when we are ready to use the application we will switch it for production
+we need to specify the uri, where the database is located. so for now we will use sql light and choose location on the computer
+where it can be.
+
+Video part 5: Package structure
+converting into a package, split models
+
+Video part 6: take care of Hashin the data base, we can use bicript, to avoid other people to access our database
+installing the package--> and then in the command line-->
+>>> from flask_bcrypt import Bcrypt
+>>> bcrypt = Bcrypt()
+>>> bcrypt.generate_password_hash()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: generate_password_hash() missing 1 required positional argument: 'password'
+>>> bcrypt.generate_password_hash('test')
+b'$2b$12$RFq1UeKtuvhWjeom1WXmOu8BZvF2SJ0x3JQEmN4wq3gVbO9zfqqCu' --> b means that it is in bytes
+
+>>> bcrypt.generate_password_hash('test').decode('utf-8')
+'$2b$12$F1a6VTTauCucgY.lqrqtF.SmQLFnG3kkXYEn1fiPimHV9h2x7c5UO' --> no longer b in the beginning, everytime I do it, I get a different hash everytime
+>>> hash_pw =  bcrypt.generate_password_hash('test').decode('utf-8') --> save it as variable
+preventing from signing in a user that already exists
+--> create a login system--> that a user can login and log out--> using flask login
+--> if a user is already logged in, they dont need to be on the login page
+
+--> if the user is already logged in or registered shouldn't be able to go back to the homepage
+-->#route that users can't access if they are not logged in
+--> video 6: 39:00, doesn't go to login page
+--> https://www.youtube.com/watch?v=MwZwr5Tvyxo&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH
+
+--> Video 7: designing the account page
+creating a default image
+ability to update forms and pictures
+form to update our account information, and this is going to be similar to our registration form
+we want that the form will already have the current name and email
+to change the profile pic we need a form that is input type of file
+we need to add encoding to pass the image properly
+resize large images with pillow package
+
+-->Video 8: adding the ability for users to have posts and display on homepage
+First of all, create a page where users can create a post.
+link to create posts in the navigation bar
+invalid feedback in german --> check!!! check age!
+add the post to the database
+ability--> update or delete post
+Flask allows us to create variables within our routes
+we want to make sure that the user wants to delete - extra validation, make it hard for them to do it by accident
+using bootstrap classes and divs
+
+--> Video 9: more functionality to the application, punjination, sort posts, organize the pages
+we want the newer post at the top and the oldest at the bottom
+
+--> Video 10: use email to allow users to reset their passwords
+we need mail server, mail port..
+smtplib.SMTPServerDisconnected: Connection unexpectedly closed-->
+solution -->Less secure apps setting was turned on
+
+--> Video 11: restructuring and Flask Blueprints, move variables and do a function out of it to be more modular.
+What will allow us to make different instances of the app- application factory
+
+--> Video 12: custom error pages with navigations to go back
+
+-->Deploying Your Application (Option #1) - Deploy to a Linux Server, make it work in a web server, the site is only
+ on our local machine, it should be accessible for everyone
+--> Root Password DanielleHC2021
+--> SSH Command ssh root@172.105.248.100
+Linux/bash on windows
+
+Enter new UNIX username: daniellehc
+New password:Dd160293
+Retype new password:
+passwd: password updated successfully
+Installation successful!
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ssh daniellehc@172.105.248.100
+webserver- bestpractices like setting up ssh keys and firewalls
+instead of password we want a key based authentification
+make a ssh directory
+
+scp ~/.ssh/id_rsa.pub daniellehc@172.105.248.100:~/.ssh/authorized_keys
+
+permissions in linux
+
+ssh keys work!
+setup a firewall and set up a few rules there
+sudo allow ssh, for certain ports, allow any port that we want to access from the outside
+-----------------------------------------------------------------------------------------------------------------------
+Routes
+#dummy data
+#database call and we get back these posts
+#we can pass them in the template
+
+
+@app.route('/')
+@app.route('/home')
+def home():
+    page = request.args.get('page', 1, type= int)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page = page, per_page=5) # how many posts per page
+    #instead of returning we can just render the template (with render_template)
+    return render_template('home.html', posts=posts)# posts data, aligned with the template, we will have access to that
+                                                       # variable in our template
+
+#Step 2: open in cmd the project and write the following comments:
+#open CMD directly from the file directory
+# cd FlaskBlog.py
+#set FLASK_APP=run.py --> set FLASK_ENV=development--> flask run --> get IP address
+#--> http://127.0.0.1:5000/ --> this is a running webserver
+#5000 is the port number
+#Problems: pip install virtualenv, couldn't find a Flask app
+#solution to the problem: set FLASK_APP=run.py # dont use a space when setting the environment variable
+#to rerun--> ctrl + c --> flask run
+#to do changes without rerun all the time, we need to run the app in the debug mode (the debug mode needs to be in the end of the page)
+
+
+#-->therfore in cmd --> set FLASK_DEBUG=1--> flask run
+#for another about page
+@app.route('/about')
+def about():
+    return render_template('about.html', title='About') #passing here a title, with the if statement it will use this title
+
+#registration route
+#we need to allow posts here, we need to accept posts requests
+@app.route("/register", methods= ['GET', 'POST'])
+#we need to check if the data is valid to our form
+def register():
+    if current_user.is_authenticated:
+        #if the user is already logged in or registered shouldn't be able to go back to the homepage
+        return redirect(url_for('home'))
+    form = RegistrationForm() #it will be connected to the template
+    if form.validate_on_submit():#get a flash message i.e. an alert
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username = form.username.data, email = form.email.data, password = hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Your account has been created! You are now able to log in', 'success')#bootstrap has different classes of alert one of them is success
+        #from here we will redirect the user to out home page
+        return redirect(url_for('login'))
+    return render_template('register.html', title = 'Register', form = form)
+
+@app.route("/login", methods= ['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm() #it will be connected to the template
+    if form.validate_on_submit():
+        user = User.query.filter_by(email= form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            #makes sure that the user we created exists , if the user exists and the password is valid with what we have in out database, he can log in
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')#query parameters, args is a dictionary
+            #query parameter called next when trying to access a page while not logged in
+            return redirect(next_page) if next_page else  redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('login.html', title = 'Login', form = form)
+
+#creating a logout route for users
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+def save_picture(form_picture):
+    #takes the picture data
+    random_hex = secrets.token_hex(8)#8 bytes
+    #grab the file extension with os
+    _, f_ext = os.path.splitext(form_picture.filename) # use an _ to just have a name/variable
+    picture_fn = random_hex + f_ext #where the image is saved
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn) # full path to our directory
+
+    #resize the image with PIL package
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+
+
+    i.save(picture_path)
+    return picture_fn
+
+
+
+#route that users can't access if they are not logged in
+@app.route("/account", methods= ['GET', 'POST'])
+#add the required decorator
+@login_required # if they arenot logged in
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit() #save in our sql db
+        flash("Your account has been updated!", 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    #set image file
+    image_file = url_for('static', filename = 'profile_pics/' + current_user.image_file)
+    return render_template('account.html', title='Account', image_file = image_file, form = form)
+
+@app.route("/posts/new", methods= ['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title = form.title.data, content = form.content.data, author = current_user)
+        db.session.add(post) #add posts to db
+        db.session.commit()
+        flash('Your posts has been created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title = 'New Post', form = form, legend = 'New Post')
+
+@app.route("/posts/<int:post_id>")
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('posts.html', title = post.title, post=post)
+
+@app.route("/posts/<int:post_id>/update" , methods= ['GET', 'POST'])
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    #we want to make sure that only the users that uploaded the posts can update it
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Your posts has been updated!', 'success')
+        return redirect(url_for('posts', post_id = post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template('create_post.html', title='Update Post', form=form, legend = 'Update Post')
+
+@app.route("/posts/<int:post_id>/delete" , methods= ['POST']) # we will accept only posts, cos we want to delete
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    # we want to make sure that only the users that uploaded the posts can update it
+    if post.author != current_user:
+        abort(403)
+    #delete posts and redirect to home page
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your posts has been deleted!', 'success')
+    return redirect(url_for('home'))
+
+
+@app.route('/user/<string:username>')
+#route where we show all posts to this username
+def user_posts(username):
+    page = request.args.get('page', 1, type= int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Post.query.filter_by(author = user).order_by(Post.date_posted.desc()).paginate(page = page, per_page=5) # how many posts per page
+    #instead of returning we can just render the template (with render_template)
+    return render_template('user_posts.html', posts=posts, user = user)
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request', sender='demo@gmail.com', recipients=[user.email])
+    msg.body = f''' To reset yout Password, visit the following link:
+    {url_for('reset_token', token = token, _external= True)}
+
+If you did not make this request, then simply ignore this email and no changes will be made'''
+    mail.send(msg)
+
+@app.route('/reset_password', methods = ['GET', 'POST'])
+def reset_request():
+    #enter their email to request a password reset
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'info')#class of info - blue
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Password', form= form)
+
+@app.route('/reset_password/<token>', methods = ['GET', 'POST'])
+def reset_token(token):
+    #where they actually reset password with the token activ
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():#get a flash message i.e. an alert
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in', 'success')#bootstrap has different classes of alert one of them is success
+        #from here we will redirect the user to out home page
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form= form)
+
+
+------------------------------------------------------------------------------------------------------------------
+Forms
+#we create in this file our forms
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
+#Filefield is gonna be the type of field, fileallowed is a validater like only jpg or jpng
+from flask_login import current_user
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from FlaskBlog.models import User
+
+
+class RegistrationForm(FlaskForm): #we will have different fields
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)]) # we would like to have a few limitations for the user name, it shouldn't be so long,
+    #therefor we add a list of validations
+    email = StringField('Email', validators=[DataRequired(), Email()])# DataRequired cos we dont want to leave that empty
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign Up')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user: # if user is nan it wont appear, if user exists--> validation error
+            raise ValidationError('This username already exists, please choose another one')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:  # if user is nan it wont appear, if user exists--> validation error
+            raise ValidationError('This email already exists, please choose another one')
+
+class LoginForm(FlaskForm): #we will have different fields
+    #email as login form
+    email = StringField('Email', validators=[DataRequired(), Email()])# DataRequired cos we dont want to leave that empty
+    remember = BooleanField('Remember Me') # remember me to the login, will allow users to come back to the software, without typing everything again.
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
+class UpdateAccountForm(FlaskForm): #we will have different fields
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)]) # we would like to have a few limitations for the user name, it shouldn't be so long,
+    #therefor we add a list of validations
+    email = StringField('Email', validators=[DataRequired(), Email()])# DataRequired cos we dont want to leave that empty
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    #make sure it is going to be rendered in our template
+    submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        #this validation will run only if the data is different from the current user name or email
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user: # if user is nan it wont appear, if user exists--> validation error
+                raise ValidationError('This username already exists, please choose another one')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:  # if user is nan it wont appear, if user exists--> validation error
+                raise ValidationError('This email already exists, please choose another one')
+
+#create a new form for posts
+class PostForm(FlaskForm):
+    title = StringField('Title', validators = [DataRequired()])
+    content = TextAreaField('Content', validators = [DataRequired()])
+    submit = SubmitField('Post')
+
+
+#form when they go to reset their password
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:  # if user is nan it wont appear, if user exists--> validation error
+            raise ValidationError('There is no account with that email. You must register first.')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
+----------------------------------------------------------------------------------------------------------------------
+init - start
+#Step 1: from the official homepage of flask copy paste the following:
+
+import os
+import smtplib
+
+from flask_bcrypt import Bcrypt
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_mail import Mail
+
+
+app = Flask(__name__)
+
+#setting a secret key for the app, that will protect against modified cookies and cross side affects..
+app.config['SECRET_KEY'] = 'b19500995ddc5f93b7556ad3514e4756' #setting secret key, we need for that random charachters, a way to get some random charachters is through the python cmd
+# in cmd --> python-->import secrets -->secrets.token_hex(16), 16 is the number of bytes
+
+#sql light database
+#/// to specify a relative path
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app) #now we have sqlalchemy database instant and are ready to work with our databases
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info' #in bootstrap its a nice infobox
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'demo@gmail.com'
+app.config['MAIL_PASSWORD'] = 'demo123456'
+mail = Mail(app)
+
+
+----------------------------------------------------------------------------------------------------------------------
+Models
+from datetime import datetime
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from FlaskBlog import db, login_manager, app
+from flask_login import UserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
+@login_manager.user_loader
+def load_user(user_id):
+    #function to get a user by id
+    return User.query.get(int(user_id))
+
+#calss models that are going to be our database structure, we will create the user class to hold our users -user model
+class User(db.Model, UserMixin):
+    #set all the columns in the database
+    id = db.Column(db.Integer, primary_key = True) # the id is an integer, and it is also a unique id for our user.
+    username = db.Column(db.String(20), unique= True, nullable = False )#username is our string and in the validation its 20 charachters
+    #the username has to be unique and it cannot be null
+    email = db.Column(db.String(120), unique=True, nullable=False)#max 120 charachters
+    image_file = db.Column(db.String(20), nullable = False, default = 'default.jpg')#for the usersprofile picture, nullable false for a default image
+    password = db.Column(db.String(60), nullable=False) # people can have the same passwords, thats why unique is flase, and not written
+    posts = db.relationship('Post', backref= 'author', lazy = True)#our posts attribute has a relationship to the posts model,
+    #backref is when we have a posts, it will get the user that posted it, the lazy argument just defines that it should load the data in one go
+    #it is a relationship and not a column, additionally query to get all the posts that a user have created
+
+    #we want to make tokens here
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod # this is a statoc method
+    def verify_reset_token(token):
+        #gets the token and creats a serializer and tries to load that token
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+
+    def __repr__(self):
+        #how our object is printed whenever we printed out
+        #pronount a user object
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        #videos to using classes in Python
+
+#now we will create our posts class to hold our posts
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key= True)
+    title = db.Column(db.String(100), nullable = False)
+    date_posted = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    content = db.Column(db.Text, nullable= False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False) #primary key of our user
+    def __repr__(self):
+        #how our object is printed whenever we printed out
+        #pronount a user object
+        return f"Post('{self.title}', '{self.date_posted}')"
+
+#go to cmd of the project-->look fot the blog script-->python--> from run.py import db--> db.create_all()
+#this is going to be a database on a file in our system
+#see created site.db and the database will be the same location as our app
+#we can add info to the posts through the command line
+#from FlaskBlog import User, posts-->  user_1 = User(username = 'Corey', email = 'c@demo.com', password= 'password') -->db.session.add(user_1)
+#to commit the changes to the database-->db.session.commit()
+#we can query our users--> User.query.all()
+#User.query.first()--> to get the first user
+#we can filter the results --> User.query.filter_by(username = 'Corey').all()--> get a list with all those
+#we can catch the query in a variable, and then have an access to it-->
+#user = User.query.filter_by(username = 'Corey').first()
+#user --> to access it all
+#user.id --> to access the id
+#user = User.query.get(1)--> fetches the user with id 1
+#user.posts
+# post_1 = Post(title = 'Blog 1', content = 'First Post Content!', user_id = user.id)
+#>>> db.session.add(post_1)
+#>>> db.session.commit()
+#>>> user.posts
+# posts = Post.query.first()
+#to delete all data -->db.drop_all()--> db.create_all()-->User.query.all()
+
+#the posts model and the user model will have a relationship
+#one to many relationship, cos one user can have multiple posts
+
+--------------------------------------------------------------------------------------------------------------------
+Run.py
+from FlaskBlog import app
+
+if __name__ == '__main__':
+    #only true if we run the script directly with python
+    app.run(debug=True)
+#we can run the app directly with python now
+#now in cmd it will be --> python run.py
