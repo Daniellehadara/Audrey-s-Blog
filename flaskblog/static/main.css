@@ -8,8 +8,8 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
-.bg-steel {
-  background-color: #5f788a;
+.bg-primary {
+  background-color: #99b3ff;
 }
 
 .site-header .navbar-nav .nav-link {

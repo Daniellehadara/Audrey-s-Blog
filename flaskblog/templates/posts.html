@@ -15,6 +15,9 @@
       </div>
       <h2 class="article-title">{{ post.title }}</h2>
       <p class="article-content">{{ post.content }}</p>
+      <img src="{{url_for('static', filename='pics/'+ post.title + '.jpg')}}" srcset=
+                          "{{url_for('static', filename='pics/default_worrier.jpg')}};" border = "0" align="middle" style="width:200px;height:230px;"/>
+      <p class="article-file">{{ post.file }}</p>
     </div>
   </article>
   <!-- Modal -->

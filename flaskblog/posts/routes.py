@@ -4,9 +4,10 @@ from flask_login import current_user, login_required
 from flaskblog import db
 from flaskblog.models import Post
 from flaskblog.posts.forms import PostForm
+import os
+
 
 posts = Blueprint('posts', __name__)
-
 
 @posts.route("/posts/new", methods=['GET', 'POST'])
 @login_required
@@ -16,6 +17,15 @@ def new_post():
         post = Post(title=form.title.data, content=form.content.data, author=current_user)
         db.session.add(post)
         db.session.commit()
+        file = form.file.data
+        base_dir = 'C:\\Users\\cohendh\\Documents\\GitHub\\MyBlog\\flaskblog\\static\\pics\\'
+        if file is None:
+            file_name = 'default_worrier.jpg'
+            file.save(base_dir + file_name)
+        else:
+            file_name = post.title + '.jpg'
+            f = open(base_dir + file_name, "a")
+            file.save(base_dir + file_name)
         flash('Your posts has been created!', 'success')
         return redirect(url_for('main.home'))
     return render_template('create_post.html', title='New Post',
@@ -39,8 +49,19 @@ def update_post(post_id):
         post.title = form.title.data
         post.content = form.content.data
         db.session.commit()
+        file = form.file.data
+        try:
+            file_name = post.title + '.jpg'
+            base_dir = 'C:\\Users\\cohendh\\Documents\\GitHub\\MyBlog\\flaskblog\\static\\pics\\'
+            f = open(base_dir + file_name, "a")
+            file.save(base_dir + file_name)
+        except Exception:
+            pass
+        flash('Your posts has been created!', 'success')
+        return redirect(url_for('main.home'))
+        return render_template('create_post.html', title='New Post',form=form, legend='New Post')
         flash('Your posts has been updated!', 'success')
-        return redirect(url_for('posts.posts', post_id=post.id))
+        return redirect(url_for('posts.post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
